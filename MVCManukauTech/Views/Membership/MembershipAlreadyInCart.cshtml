@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewData["Title"] = "MembershipAlreadyInCart";
+}
+
+<script>
+    window.onload = (function () {
+        swal("You already have a membership product in the cart. \n Please remove it from the cart to add a new one.")
+            .then(() => {
+                window.location.replace("/OrderDetails/ShoppingCart");
+            });
+
+    })
+</script>
+

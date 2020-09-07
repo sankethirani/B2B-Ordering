@@ -1,0 +1,82 @@
+﻿@model IEnumerable<MVCManukauTech.ViewModels.MembershipViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    var isLoggedIn = User.Identity.IsAuthenticated;
+}
+
+<h1>Membership</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div id="isLoggedIn" style="visibility:hidden">@isLoggedIn</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Image
+            </th>
+            <th>
+                Product Name
+            </th>
+            <th>
+                Unit Price
+            </th>
+            <th>
+                Description
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>        
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src="~/Images/Products/@item.ImageFileName" style="width:70px;" />
+                </td>
+                <td>
+                    @item.ProductName
+                </td>
+                <td>
+                    @* SKH convert the unit price to 2dp places to make the view more user friendly *@
+                    $@Math.Round(item.UnitPrice, 2)
+                </td>
+                <td>
+                    Receive a @item.Description% discount on all orders
+                </td>
+                <td>
+                    @*Add to cart button for all users except Admin*@
+
+                    @if (!User.IsInRole("Admin"))
+                    {
+                        @if (isLoggedIn)
+                        {
+                            <button><a href="~/OrderDetails/ShoppingCart?ProductId=@item.ProductId">Add&nbsp;to&nbsp;Cart</a></button>
+                        }
+
+                    }
+                    @*Re-using the code in the ProductsController as Membership is a product with authorization *@
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <button><a href="~/Products/Edit?id=@item.ProductId">Edit</a></button>
+                    }
+
+                </td>                
+            </tr>
+        }
+        
+        
+    </tbody>
+</table>
+
+<script>
+
+    window.onload = (function () {
+        if (userLoggedIn = document.getElementById("isLoggedIn").innerHTML == "False") swal("Please Log in or Register to Buy Membership");
+    });
+    
+</script>
+

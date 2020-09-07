@@ -1,0 +1,178 @@
+﻿@model MVCManukauTech.ViewModels.CheckoutViewModel
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<h1>Checkout</h1>
+
+
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <h3>Shipping Details</h3>
+
+    <div class="form-horizontal">
+        <hr />
+        <div class="form-group">
+            <label for="CustomerName" class="control-label col-md-2" style="display:inline">Name:</label>
+            <div class="col-md-10">
+                <input type="text" id="ShipName" name="ShipName" value="@Model.ShipName" style="display:inline" required/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="StreetAddress" class="control-label col-md-2" style="display:inline">Street Address:</label>
+            <div class="col-md-10">
+                <input type="text" id="StreetAddress" name="StreetAddress" value="@Model.StreetAddress" style="display:inline" required/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="City" class="control-label col-md-2" style="display:inline">City:</label>
+            <div class="col-md-10">
+                <input type="text" id="City" name="City" value="@Model.City" style="display:inline" required/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="PostCode" class="control-label col-md-2" style="display:inline">Postal Code:</label>
+            <div class="col-md-10">
+                <input type="text" id="PostCode" name="PostCode" value="@Model.PostalCode" style="display:inline" required/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <b>Net Total : $@Math.Round(Model.GrossTotal, 2)</b>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <b>Discount : $@Math.Round(Model.Discount, 2)</b>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <b>Grand total : $@ViewData["GrandTotal"]</b>
+
+                <p></p>
+
+                <div id="paypal-button"></div>
+            </div>
+        </div>
+
+
+        <div>
+            <a class="btn-warning"  asp-area="" asp-controller="OrderDetails" asp-action="ShoppingCart"> &lt; Return to Cart</a>
+        </div>
+
+
+    </div>
+}
+
+    <script>
+
+        //document.addEventListener('contextmenu', event => event.preventDefault());
+         //Paypal
+    @*var grandTotal = @ViewBag.grandTotal;
+        grandTotal = grandTotal.toFixed(2);*@
+
+
+        paypal.Button.render({
+            env: 'sandbox',
+            client: {
+                sandbox: 'AbNIc71vv_VWq2Rh2YfssLM2sq9lmIVzv9-1qOzssa8-_B-OJ5BfEj5G88YtI1sf6D7kBXxV_34p_16z'
+            },
+            commit: true, // Show a 'Pay Now' button
+
+            style: {
+                label: 'checkout',
+                fundingicons: true, // optional
+                branding: true, // optional
+                size: 'responsive', // small | medium | large | responsive
+                shape: 'pill',   // pill | rect
+                color: 'gold'   // gold | blue | silve | black
+            },
+
+            payment: function (data, actions) {
+                return actions.payment.create({
+                    payment: {
+                        transactions: [
+                            {
+                                amount: {
+                                    total: Number(@ViewBag.GrandTotal).toFixed(2),
+                                    currency: 'NZD'
+                                }
+                            }
+                        ]
+                    },
+                    experience: {
+                        input_fields: {
+                            no_shipping: 1
+                        }
+                    }
+                });
+            },
+
+            onAuthorize: function (data, actions) {
+                /*
+                 * Execute the payment here
+                 */
+                //location.replace("checkout/checkoutresult")
+
+                //  https://stackoverflow.com/questions/45383047/how-to-get-the-transaction-id-using-paypal-express-checkout-integration-client?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+
+                return actions.payment.execute().then(function (payment) {
+
+                    var paypalID = payment.transactions[0].related_resources[0].sale.id;
+
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.open("GET", "/Checkout/PaypalResult?paypalID=" + paypalID, false);
+                    xhttp.send();
+
+
+                    var Res = xhttp.responseText;
+                    if (Res == "Done") {
+                        //sucessful payment
+                        UpdateDatabase();                        
+                        location.replace("Checkout/CheckoutResult");
+                    }
+                    else {                        
+                        alert("Error");
+                    }
+                    
+                });
+            },
+
+            onCancel: function (data, actions) {
+                /*
+                 * Buyer cancelled the payment
+                 */
+                location.replace("OrderDetails/ShoppingCart")
+            },
+
+            onError: function (err) {
+                //NV In case of failed payment
+                alert("Payment unsuccessful");
+            }
+    }, '#paypal-button');
+
+
+    function UpdateDatabase() {
+        var shipName = document.getElementById("ShipName").value;
+        var shipAddress = document.getElementById("StreetAddress").value + ", " + document.getElementById("City").value
+            + ", " + document.getElementById("PostCode").value;
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "/Checkout/CheckoutUpdateDatabase?shipName=" + shipName + "&shipAddress=" + shipAddress
+            + "&grossTotal=" + @Model.GrossTotal + "&discount=" + @Model.Discount + "&netTotal=" + @ViewData["GrandTotal"], false);
+        xmlhttp.send();
+    }
+
+    </script>
+
+

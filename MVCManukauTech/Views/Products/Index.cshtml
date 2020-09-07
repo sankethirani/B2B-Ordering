@@ -1,0 +1,127 @@
+﻿@model IEnumerable<MVCManukauTech.Models.DB.Product>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>PRODUCTS</h1>
+<form action="" method="get" autocomplete="off">
+    <div class="row">
+        <div class="col-sm-10">
+            <input type="text" id="searchString" name="searchString" style="width:25em"
+                   onkeyup="XAjaxRequest(this.value);" placeholder="Search for fruits" />
+            <input id="searchButton" type="submit" value="Submit" />
+            <br />
+            <div id="suggestions" style="position:absolute; visibility:hidden; z-index:10"></div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    function XAjaxRequest(searchString) {
+        var oeSuggestions = document.getElementById("suggestions");
+        //clear the options before each query process
+        //Ref stackoverflow: https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
+        oeSuggestions.innerHTML = "";
+
+        if (searchString.length < 2) return;
+
+
+
+        var xmlhttp;
+        xmlhttp = new XMLHttpRequest();
+        var url = "/Catalog/IndexAJAX?searchString=" + searchString;
+        xmlhttp.open("GET", url, false);
+        xmlhttp.send();
+
+        // NV improve the auto-suggest UI
+        var rawResponse = xmlhttp.responseText;
+        var oResponse = JSON.parse(rawResponse);
+        //alert(rawResponse);
+
+        for (i = 0; i < oResponse.length; i++) {
+            oeSuggestions.innerHTML += "<input type='button' value='" + oResponse[i] + "' onclick='XSubmit(this.value);' style='width:16em;' /><br />";
+        }
+        oeSuggestions.style.visibility = "visible";
+        //oeSuggestions.style.left = "14em";
+        oeSuggestions.style.width = "24em";
+    }
+
+    function XSubmit(searchString) {
+        var oeSearchString = document.getElementById("searchString");
+        oeSearchString.value = searchString;
+        document.getElementById("searchButton").click();
+    }
+</script>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QuantityInStock)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Discontinued)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReorderLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageFileName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuantityInStock)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Discontinued)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReorderLevel)
+                </td>
+                <td>
+                    <img src="~/Images/Products/@item.ImageFileName" style="width:150px" />
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ProductId"><button> Edit </button></a>
+                </td>
+                <td>
+                    <a asp-controller="Catalog" asp-action="Details" asp-route-id="@item.ProductId"><button> Details </button></a>
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>

@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewData["Title"] = "MembershipExpired";    
+}
+
+
+<script type="text/javascript">
+    function XAjaxRenewMembership() {
+        var xmlhttp;
+        xmlhttp = new XMLHttpRequest();
+        var url = "/Membership/RenewMembership";
+        xmlhttp.open("GET", url, false);
+        xmlhttp.send();        
+
+        var rawResonse = xmlhttp.response;
+        //alert(rawResonse);
+        //SKH this does not clear the link and sends user to https://localhost:44308/Membership/~/OrderDetails/ShoppingCart?ProductId=100 that doesn't exist
+        location.replace( "/OrderDetails/ShoppingCart?ProductId=" + rawResonse);
+
+        //var newUrl = "OrderDetails/ShoppingCart?ProductId=" + rawResonse;
+        //xmlhttp.open("GET", newUrl, false);
+        //xmlhttp.send();
+    }
+
+    function XAjaxCancelMembership() {
+        var xmlhttp;
+        xmlhttp = new XMLHttpRequest();
+        var url = "/Membership/CancelMembership";
+        xmlhttp.open("GET", url, false);
+        xmlhttp.send();
+    }
+
+
+</script>
+
+<h3>Your Current Membership has Expired <img src="~/Images/Products/sad_emoji.png" style="width:50px;" /></h3>
+<h4>This is what you can do next:</h4>
+<ul>
+    <li><button type="button" class="btn btn-link" onclick="XAjaxCancelMembership()"><a href="~/Home">Continue Shopping With no Membership</a></button></li>
+    <li><button type="button" class="btn btn-link"><a href="~/Membership">Buy New Membership</a></button></li>
+    <li><button type="button" class="btn btn-link" onclick="XAjaxRenewMembership()">Renew Membership</button></li>
+</ul>
+
+

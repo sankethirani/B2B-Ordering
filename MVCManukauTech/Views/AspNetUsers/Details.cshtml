@@ -1,0 +1,35 @@
+﻿@model MVCManukauTech.Models.DB.AspNetUsers
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>User Details</h1>
+
+<div>
+    <h4>@Model.Title&nbsp;@Model.Name</h4>
+    <div class="col-4">
+        
+            <p>
+                <label>StreetAddress</label>: @Model.StreetAddress
+            </p>
+
+            <p>
+                <label>City</label>: @Model.City
+            </p>
+            <p>
+                <label>Postal Code</label>: @Model.PostalCode
+            </p>
+            <p>
+                <label>Email</label>: @Model.Email
+            </p>
+            <p>
+                <label>Phone No.</label>: @Model.PhoneNumber
+            </p>
+        
+    </div>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

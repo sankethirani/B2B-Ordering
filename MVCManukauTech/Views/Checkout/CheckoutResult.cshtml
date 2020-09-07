@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewData["Title"] = "CheckoutResult";
+}
+
+<h1>Checkout Result</h1>
+
+<script>
+    window.onload = (function () {
+        swal("Successful Payment")
+            .then(() => {                
+                window.location.replace("/home");
+            });
+        
+    })    
+</script>

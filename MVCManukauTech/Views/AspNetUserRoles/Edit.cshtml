@@ -1,0 +1,65 @@
+﻿@model MVCManukauTech.Models.DB.AspNetUserRoles
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>AspNetUserRoles</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <Form onsubmit="AjaxPost()">
+            <input type="hidden" id="userId" asp-for="UserId" />
+            <input type="hidden" asp-for="RoleId" />
+            <div class="form-group">
+                <label>Email</label>
+                <input class="form-control" value="@Model.User.Email" readonly />
+            </div>
+
+            <div class="form-group">
+                <label>Role Name</label>
+                <select  class="form-control" id="roleName" name="roleName">
+                    <option value="Admin">Admin</option>
+                    <option value="Customer">Customer</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </Form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script type="text/javascript">
+    function AjaxPost() {
+
+
+
+        var roleName = document.getElementById("roleName").value;
+
+        var userId = document.getElementById("userId").value;
+
+        var xmlhttp = new XMLHttpRequest();
+        var url = "/AspNetUserRoles/EditAJAX?userId=" + userId + "&roleName=" + roleName;
+
+        xmlhttp.open("GET", url, false);
+        xmlhttp.send();
+        
+        if (!xmlhttp.responseText == " ") {
+            alert("Role Updated Successfully");
+        } else {
+            alert("Role Update Failed");
+        }
+        
+        
+    }
+
+</script>

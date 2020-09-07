@@ -1,0 +1,103 @@
+﻿@model MVCManukauTech.Models.DB.AspNetUsers
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<script src='https://cloud.tinymce.com/5/tinymce.min.js?apiKey=your_API_key'></script>
+<script>
+    tinymce.init({
+        selector: '#mytextarea'
+
+    });
+</script>
+<h1>Edit User Details</h1>
+
+<h4>AspNetUsers</h4>
+<hr />
+<div class="row">
+    <div class="col-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserName" />
+            <input type="hidden" asp-for="NormalizedUserName" />
+            <input type="hidden" asp-for="NormalizedEmail" />
+            <input type="hidden" asp-for="EmailConfirmed" />
+            <input type="hidden" asp-for="PasswordHash" />
+            <input type="hidden" asp-for="SecurityStamp" />
+            <input type="hidden" asp-for="ConcurrencyStamp" />
+            <input type="hidden" asp-for="PhoneNumberConfirmed" />
+            <input type="hidden" asp-for="TwoFactorEnabled" />
+            <input type="hidden" asp-for="LockoutEnd" />
+            <input type="hidden" asp-for="LockoutEnabled" />
+            <input type="hidden" asp-for="AccessFailedCount" />
+
+            <div class="row">
+                <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group col-lg-9 col-md-9 col-sm-12">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                    <label asp-for="StreetAddress" class="control-label"></label>
+                    <textarea asp-for="StreetAddress" class="form-control">@Model.StreetAddress</textarea>
+                    <span asp-validation-for="StreetAddress" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                    <label asp-for="City" class="control-label"></label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                    <label asp-for="PostalCode" class="control-label"></label>
+                    <input asp-for="PostalCode" class="form-control" />
+                    <span asp-validation-for="PostalCode" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                    <label asp-for="PhoneNumber" class="control-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" readonly />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                    <label class="control-label"> @Html.DisplayNameFor(Model => Model.MembershipType)</label><br />
+                    @Html.DropDownListFor(Model => Model.MembershipType, new SelectList(new string[] { "Gold", "Silver", "Bronze" }, Model.MembershipType))
+
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                    <label asp-for="ExpiryDate" class="control-label"></label>
+                    <input asp-for="ExpiryDate" class="form-control" />
+                    <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

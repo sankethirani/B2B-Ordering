@@ -1,0 +1,58 @@
+﻿@model MVCManukauTech.Models.DB.Product
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>@(Model.ProductName + " /" + Model.UnitType)</h4>
+    <hr />
+    <dl class="row">
+        @*<dt class="col-sm-2">
+            Name
+        </dt>
+        <dd class="col-sm-10">
+            @Model.ProductName
+        </dd>*@
+        <dt class="col-sm-2">
+            
+        </dt>
+        <dd class="col-sm-10">
+            <img src="~/images/products/@Model.ImageFileName" width="500px" />
+        </dd>
+        <dt class="col-sm-2">
+            Price
+        </dt>
+        <dd class="col-sm-10">
+            @("$" + Model.UnitPrice)
+        </dd>
+        @*<dt class="col-sm-2">
+            UnitType
+        </dt>
+        <dd class="col-sm-10">
+            @Model.UnitType
+        </dd>*@
+        <dt class="col-sm-2">
+            Description
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Description
+        </dd>
+
+    </dl>
+</div>
+<div>
+    @*<a asp-action="Edit" asp-route-id="@Model.ProductId">Edit</a> |*@
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-controller="Products" asp-action="Index">Back to List</a>
+    }
+    else
+    {
+        <a asp-action="Index">Back to List</a>
+    }
+
+
+</div>
