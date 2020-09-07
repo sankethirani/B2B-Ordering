@@ -1,1 +1,2 @@
-# B2B-Ordering
+# B2B-Ordering (Uni project)
+Prototype of an online business to business ordering system.
